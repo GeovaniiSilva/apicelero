@@ -10,12 +10,18 @@ from ogames.serializers import *
 
 
 class UploadCsvCreateAPIView(CreateAPIView):
-
+    """
+    Class based view to upload a CSV file and store all data in the database. 
+    """
     model = UploadCsv
     serializer_class = UploadCsvSerializer
 
     @receiver(post_save, sender=UploadCsv)
     def fileupload_post_save(sender, instance, *args, **kwargs):
+        """
+        post save signal to read the csv file and separate the data according to the models, 
+        storing them in the database
+        """
         with open(instance.file.path, 'r') as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
@@ -37,16 +43,38 @@ class UploadCsvCreateAPIView(CreateAPIView):
                 event_data={"name": row["event"]}
                 event_object, _ = Event.objects.get_or_create(**event_data)
 
-                athlete_data={"name": row["name"], "sex": row["sex"], "age": row["age"], "height": row["height"], "weight": row["weight"], "team": team_object}
+                athlete_data={
+                    "name": row["name"], 
+                    "sex": row["sex"], 
+                    "age": row["age"], 
+                    "height": row["height"], 
+                    "weight": row["weight"], 
+                    "team": team_object
+                    }
                 athlete_object, _ = Athlete.objects.get_or_create(**athlete_data)
 
-                athlete_event_data={"athlete": athlete_object, "game": game_object, "year": row["year"], "season": row["season"], "city": city_object, "sport": sport_object, "event": event_object, "medal": row["medal"]}
+                athlete_event_data={
+                    "athlete": athlete_object, 
+                    "game": game_object, 
+                    "year": row["year"], 
+                    "season": row["season"], 
+                    "city": city_object, 
+                    "sport": sport_object, 
+                    "event": event_object, 
+                    "medal": row["medal"]
+                    }
                 athlete_event_object, _ = AthleteEvent.objects.get_or_create(**athlete_event_data)
 
 
 
 
 class NocListCreateAPIView(ListCreateAPIView):
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new NOC data and list all NOCs*.
+
+    NOC = National Olympique Commitee
+    """
     model = Noc
     serializer_class = NocSerializer
     queryset = Noc.objects.all()
@@ -54,6 +82,12 @@ class NocListCreateAPIView(ListCreateAPIView):
 
 
 class NocRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a NOC* object.
+
+    NOC = National Olympique Commitee
+    """
     model = Noc
     serializer_class = NocSerializer
     queryset = Noc.objects.all()
@@ -65,10 +99,16 @@ class TeamListCreateAPIView(ListCreateAPIView):
     queryset = Team.objects.all()
 
 
+class TeamRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    model = Team
+    serializer_class = TeamSerializer
+    queryset = Team.objects.all()
+
+
 class AthleteListCreateAPIView(ListCreateAPIView):
     model = Athlete
     serializer_class = AthleteSerializer
-    #queryset = Athlete.objects.all()
+    queryset = Athlete.objects.all()
 
     def get_queryset(self):
         if self.request.GET.get('sex'):
@@ -100,25 +140,67 @@ class AthleteListCreateAPIView(ListCreateAPIView):
         return queryset
 
 
+
+class AthleteRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    model = Athlete
+    serializer_class = AthleteSerializer
+    queryset = Athlete.objects.all()
+
+
 class GameListCreateAPIView(ListCreateAPIView):
+
+    model = Game
+    serializer_class = GameSerializer
+    queryset = Game.objects.all()
+
+
+
+class GameRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
     model = Game
     serializer_class = GameSerializer
     queryset = Game.objects.all()
 
 
 class CityListCreateAPIView(ListCreateAPIView):
+
     model = City
     serializer_class = CitySerializer
     queryset = City.objects.all()
 
 
+class CityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    model = City
+    serializer_class = CitySerializer
+    queryset = City.objects.all()
+
+
+
 class EventListCreateAPIView(ListCreateAPIView):
+
+    model = Event
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()
+
+
+class EventRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
     model = Event
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
 
 class SportListCreateAPIView(ListCreateAPIView):
+
+    model = Sport
+    serializer_class = SportSerializer
+    queryset = Sport.objects.all()
+
+
+class SportRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
     model = Sport
     serializer_class = SportSerializer
     queryset = Sport.objects.all()
