@@ -1,4 +1,4 @@
-# Rest API for reading a CSV file containing some data from Olympiques Events
+# Rest API for reading a CSV file containing some data from Olympic Events
 ## Basic CRUD Api using Django, Django-rest-framework
 
 
@@ -25,3 +25,4 @@ The database is structured with the following models:
 ### Instructions on how to use this API ###
 
 1. /api/read-csv/ 
+** The project is deployed in Heroku.com Link: **
