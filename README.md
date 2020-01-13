@@ -1,4 +1,4 @@
-# Rest API for reading a CSV file containing some data from Olympiques Events
+# Rest API for reading a CSV file containing some data from Olympic Events
 ## Basic CRUD Api using Django, Django-rest-framework
 ### 
 
