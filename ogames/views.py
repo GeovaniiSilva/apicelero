@@ -135,7 +135,7 @@ class AthleteListCreateAPIView(ListCreateAPIView):
             queryset = Athlete.objects.filter(weight__lte=self.request.GET.get('belowweight')).exclude(weight='NA')
         
         else:
-            queryset = Athlete.objects.all()
+            queryset = Athlete.objects.all().order_by('id')
         
         return queryset
 
@@ -152,7 +152,7 @@ class GameListCreateAPIView(ListCreateAPIView):
 
     model = Game
     serializer_class = GameSerializer
-    queryset = Game.objects.all()
+    queryset = Game.objects.all().order_by('id')
 
 
 
@@ -167,7 +167,8 @@ class CityListCreateAPIView(ListCreateAPIView):
 
     model = City
     serializer_class = CitySerializer
-    queryset = City.objects.all()
+    queryset = City.objects.all().order_by('id')
+
 
 
 class CityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -182,7 +183,7 @@ class EventListCreateAPIView(ListCreateAPIView):
 
     model = Event
     serializer_class = EventSerializer
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().order_by('id')
 
 
 class EventRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -196,7 +197,7 @@ class SportListCreateAPIView(ListCreateAPIView):
 
     model = Sport
     serializer_class = SportSerializer
-    queryset = Sport.objects.all()
+    queryset = Sport.objects.all().order_by('id')
 
 
 class SportRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -230,7 +231,7 @@ class AthleteEventListAPIView(ListCreateAPIView):
         elif self.request.GET.get('medal'):
             queryset = AthleteEvent.objects.filter(medal__icontains=self.request.GET.get('medal'))
         else:
-            queryset = AthleteEvent.objects.all()
+            queryset = AthleteEvent.objects.all().order_by('id')
                
         return queryset
 

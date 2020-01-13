@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     path('read-csv/', UploadCsvCreateAPIView.as_view(), name='read-csv'),
     path('athlete-events/', AthleteEventListAPIView.as_view(), name='list-athlete-events'),
-    path('athlete-events/<int:pk>/', AthleteEventRetrieveUpdateDestroyAPIView.as_view(), name='athlete-events-details'),
+    path('athlete-events/<int:pk>/', AthleteEventRetrieveUpdateDestroyAPIView.as_view(), name='detail-athlete-event'),
     path('athletes/', AthleteListCreateAPIView.as_view(), name='list-athletes'),
     path('athletes/<int:pk>/', AthleteRetrieveUpdateDestroyAPIView.as_view(), name='detail-athlete'),
     path('teams/', TeamListCreateAPIView.as_view(), name='list-teams'),
