@@ -2,7 +2,7 @@
 ## Basic CRUD Api using Django, Django-rest-framework
 
 
-**The project is deployed in Heroku.com Link:**
+**The project is deployed in Heroku.com Link: [secret-bayou-30347](http://secret-bayou-30347.herokuapp.com/api/)**
 
 ***What is used in this project?***
 - Python 3.7
