@@ -12,17 +12,43 @@
 ### How the database is strucured: ###
 
 The database is structured with the following models:
-- UploadCSV *Model used to Start reading CSV file and store its path in BD and itself in media folder*
-- Noc *Model used to store data from ~~National Olimpic Commitee~~*
-- Team *Model used to store data from teams*
-- Game *Model used to store data from games*
-- City *Model used to store data from cities*
-- Sport *Model used to store data from sports*
-- Event *Model used to store data from events*
-- Athlete *Model used to store data from athletes*
-- AthleteEvent *Model used to store data from athlete events*
+1. UploadCSV *Model used to Start reading CSV file and store its path in BD and itself in media folder*
+2. Noc *Model used to store data from ~~National Olimpic Commitee~~*
+3. Team *Model used to store data from teams*
+4. Game *Model used to store data from games*
+5. City *Model used to store data from cities*
+6. Sport *Model used to store data from sports*
+7. Event *Model used to store data from events*
+8. Athlete *Model used to store data from athletes*
+9. AthleteEvent *Model used to store data from athlete events*
 
 ### Instructions on how to use this API ###
+#### Content-Type: application/json ####
 
-1. /api/read-csv/ 
-** The project is deployed in Heroku.com Link: **
+- /api/read-csv/ *Method: POST* **Read CSV File and store its data in database file**
+
+- /api/nocs/ *Methods: GET/POST* **List all Noc objects/Create a new Noc object**
+- /api/nocs/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a Noc object**
+
+- /api/teams/ *Methods: GET/POST* **List all Team objects/Create a new Team object**
+- /api/teams/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a Team object**
+
+- /api/sports/ *Methods: GET/POST* **List all Sport objects/Create a new Sport object**
+- /api/sports/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a Sport object**
+
+- /api/cities/ *Methods: GET/POST* **List all City objects/Create a new City object**
+- /api/cities/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a City object**
+
+- /api/games/ *Methods: GET/POST* **List all Game objects/Create a new Game object**
+- /api/games/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a Game object**
+
+- /api/events/ *Methods: GET/POST* **List all Event objects/Create a new Event object**
+- /api/events/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete an Event object**
+
+- /api/athletes/ *Methods: GET/POST* **List all athletes objects/Create a new Athlete objects**
+- /api/athletes/?*querystring=*/ *Methods: GET* **Filter by querystring: [ 'sex','team','age','aboveage','belowage','height','aboveheight','belowheight','weight','aboveweight','belowweight', 'sport' ] all Athlete objects**
+- /api/athletes/*id*/ *Methods: GET/PUT/PATCH/DELETE/* **Retrieve/Update/Delete an Athlete object**
+
+- /api/athlete-events/ *Methods: GET/POST* **List all AthleteEvent object/Create a new AthleteEvent object**
+- /api/athletes-events/?*querystring=* *Methods: GET/PUT/PATCH/DELETE/* **Filter by querystring: [ 'athlete','event','medal' ] all AthleteEvent objects**
+- /api/athlete-events/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete an AthleteEvent object**

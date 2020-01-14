@@ -87,7 +87,7 @@ class TeamTests(APITestCase):
         """
         url = reverse('list-teams')
         noc, _ = Noc.objects.get_or_create(name="ABC")
-        data = {'name': 'Teste', 'noc': noc.id}
+        data = {'name': 'Teste', 'noc': noc.name}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg="Team object not created correctly!")
         self.assertEqual(Team.objects.count(), 1)
@@ -101,7 +101,7 @@ class TeamTests(APITestCase):
 
         url = reverse('list-teams')
         noc, _ = Noc.objects.get_or_create(name="ABC")
-        data = [{'name': 'ABC', 'noc': noc.id}, {'name': 'EDB', 'noc': noc.id}, {'name': 'TRE', 'noc': noc.id}]
+        data = [{'name': 'ABC', 'noc': noc.name}, {'name': 'EDB', 'noc': noc.name}, {'name': 'TRE', 'noc': noc.name}]
         for obj in data:
             response = self.client.post(url, obj, format='json')
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -140,7 +140,7 @@ class TeamTests(APITestCase):
 
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
-        data = {'name': 'Test2', 'noc': noc.id}
+        data = {'name': 'Test2', 'noc': noc.name}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg="Noc object not updated correctly")
         self.assertEqual(Team.objects.get().name, 'Test2')
@@ -158,13 +158,15 @@ class AthleteTests(APITestCase):
         url = reverse('list-athletes')
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         data = {
             "name": "Athlete 1",
             "sex": "M",
             "age": 33,
             "height": "189",
             "weight": "78",
-            "team": team.id
+            "team": team.name,
+            "sport": sport.name
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg="Athlete object not created correctly")
@@ -178,13 +180,15 @@ class AthleteTests(APITestCase):
         url = reverse('list-athletes')
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete_object_1 = Athlete.objects.get_or_create(
             name="Athlete 1",
             sex="M",
             age=33,
             height="189",
             weight="78",
-            team=team
+            team=team,
+            sport=sport
         )
         athlete_object_1 = Athlete.objects.get_or_create(
             name="Athlete 2",
@@ -192,7 +196,8 @@ class AthleteTests(APITestCase):
             age=23,
             height="180",
             weight="98",
-            team=team
+            team=team,
+            sport=sport
         )
         athlete_object_3 = Athlete.objects.get_or_create(
             name="Athlete 3",
@@ -200,7 +205,8 @@ class AthleteTests(APITestCase):
             age= 19,
             height="159",
             weight="68",
-            team=team
+            team=team,
+            sport=sport
         )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -214,13 +220,15 @@ class AthleteTests(APITestCase):
         url = reverse('detail-athlete', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete = Athlete.objects.get_or_create(
             name="Athlete A",
             sex="M",
             age=23,
             height="169",
             weight="72",
-            team=team
+            team=team,
+            sport=sport
         )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg="Athlete object not exhibited correctly")
@@ -233,13 +241,15 @@ class AthleteTests(APITestCase):
         url = reverse('detail-athlete', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete = Athlete.objects.get_or_create(
             name="Athlete A",
             sex="M",
             age=23,
             height="169",
             weight="72",
-            team=team
+            team=team,
+            sport=sport
         )
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, msg="Athlete object not deleted correwctly!")
@@ -253,13 +263,15 @@ class AthleteTests(APITestCase):
         url = reverse('detail-athlete', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Test", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete = Athlete.objects.get_or_create(
             name="Athlete A",
             sex="M",
             age=23,
             height="169",
             weight="72",
-            team=team
+            team=team,
+            sport=sport
         )
         data = {
             "name": "Athlete B",
@@ -267,7 +279,8 @@ class AthleteTests(APITestCase):
             "age": 24,
             "height": "169",
             "weight": "75",
-            "team": team.id
+            "team": team.name,
+            "sport": sport.name
         }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -476,8 +489,14 @@ class EventTests(APITestCase):
         to be sure an Event model is created correctly!
         """
         url = reverse('list-events')
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
         data = {
-            "name": "Event ABC"
+            "name": "Event ABC",
+            'year': 1900,
+            "season": "Summer",
+            "city": city.name,
+            "game": game.name
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg="Event object not created correctly!")
@@ -488,9 +507,29 @@ class EventTests(APITestCase):
         To be sure a list of Event objects is exhibited correctly!
         """
         url = reverse('list-events')
-        event_1 = Event.objects.get_or_create(name="Event A")
-        event_2 = Event.objects.get_or_create(name="Event B")
-        event_3 = Event.objects.get_or_create(name="Event C")
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
+        event_1 = Event.objects.get_or_create(
+            name="Event A",
+            year=1991,
+            season="Summer",
+            city=city,
+            game=game
+            )
+        event_2 = Event.objects.get_or_create(
+            name="Event B",
+            year=1992,
+            season="Winter",
+            city=city,
+            game=game
+            )
+        event_3 = Event.objects.get_or_create(
+            name="Event C",
+            year=1993,
+            season="Autumn",
+            city=city,
+            game=game
+            )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg="Event objects list not exhibited correctly!")
         self.assertEqual(Event.objects.count(), 3)
@@ -500,7 +539,15 @@ class EventTests(APITestCase):
         To be sure a detailed Event object is exhibited correctly
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        event = Event.objects.get_or_create(name="Event ABC")
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
+        event_1 = Event.objects.get_or_create(
+            name="Event ABC",
+            year=1991,
+            season="Summer",
+            city=city,
+            game=game
+            )
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg="Event object not exhibited correctly!")
         self.assertEqual(Event.objects.get().name, "Event ABC")
@@ -510,7 +557,15 @@ class EventTests(APITestCase):
         To be sure a Event object is deleted correctly!
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        event = Event.objects.get_or_create(name="Event ABC")
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
+        event_1 = Event.objects.get_or_create(
+            name="Event A",
+            year=1991,
+            season="Summer",
+            city=city,
+            game=game
+            )
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT, msg="Event object not deleted correctly!")
         self.assertEqual(Event.objects.count(), 0)
@@ -520,11 +575,19 @@ class EventTests(APITestCase):
         To be sure a Event object is deleted correctly!
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        event = Event.objects.get_or_create(name="Event ABC")
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
+        event_1 = Event.objects.get_or_create(
+            name="Event A",
+            year=1991,
+            season="Summer",
+            city=city,
+            game=game
+            )
         data = {
-            "name": "Event AAA"
+            "name": "Event AAA",
         }
-        response = self.client.put(url, data, format='json')
+        response = self.client.patch(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg="Event object not deleted correctly!")
         self.assertEqual(Event.objects.get().name, "Event AAA")
 
@@ -541,26 +604,28 @@ class AthleteEventTests(APITestCase):
         url = reverse('list-athlete-events')
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Team 1", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport A")
         athlete, _ = Athlete.objects.get_or_create(
             name="Athlete 1", 
             sex="M", 
             age=23, 
             height="160", 
             weight="78",
-            team=team
+            team=team,
+            sport=sport
             )
-        game, _ = Game.objects.get_or_create(name="Game ABC")
-        city, _ = City.objects.get_or_create(name="City ABC")
-        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
-        event, _ = Event.objects.get_or_create(name="Event ABC")
+        city, _ = City.objects.get_or_create(name="City A")
+        game, _ = Game.objects.get_or_create(name="Game B")
+        event, _ = Event.objects.get_or_create(
+            name="Event A",
+            year=1991,
+            season="Summer",
+            city=city,
+            game=game
+            )
         data = {
-            "athlete": athlete.id,
-            "game": game.id,
-            "year": 1999,
-            "season": "Summer",
-            "city": city.id,
-            "sport": sport.id,
-            "event": event.id,
+            "athlete": athlete.name,
+            "event": event.name,
             "medal": "Gold"
         }
         response = self.client.post(url, data, format='json')
@@ -574,45 +639,37 @@ class AthleteEventTests(APITestCase):
         url = reverse('list-athlete-events')
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Team 1", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete, _ = Athlete.objects.get_or_create(
             name="Athlete 1", 
             sex="M", 
             age=23, 
             height="160", 
             weight="78",
-            team=team
+            team=team,
+            sport=sport
             )
         game, _ = Game.objects.get_or_create(name="Game ABC")
         city, _ = City.objects.get_or_create(name="City ABC")
-        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
-        event, _ = Event.objects.get_or_create(name="Event ABC")
-        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
-            athlete=athlete,
-            game=game,
+        event, _ = Event.objects.get_or_create(
+            name="Event ABC",
             year=1991,
             season="Summer",
             city=city,
-            sport=sport,
+            game=game,
+            )
+        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
+            athlete=athlete,
             event=event,
             medal="Gold"
         )
         athlete_event_2, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
-            game=game,
-            year=1992,
-            season="Summer",
-            city=city,
-            sport=sport,
             event=event,
             medal="Bronze"
         )
         athlete_event_3, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
-            game=game,
-            year=1993,
-            season="Summer",
-            city=city,
-            sport=sport,
             event=event,
             medal="Silver"
         )
@@ -627,25 +684,27 @@ class AthleteEventTests(APITestCase):
         url = reverse('detail-athlete-event', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Team 1", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete, _ = Athlete.objects.get_or_create(
             name="Athlete 1", 
             sex="M", 
             age=23, 
             height="160", 
             weight="78",
-            team=team
+            team=team,
+            sport=sport,
             )
         game, _ = Game.objects.get_or_create(name="Game ABC")
         city, _ = City.objects.get_or_create(name="City ABC")
-        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
-        event, _ = Event.objects.get_or_create(name="Event ABC")
-        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
-            athlete=athlete,
+        event, _ = Event.objects.get_or_create(
+            name="Event ABC",
             game=game,
             year=1991,
             season="Summer",
             city=city,
-            sport=sport,
+            )
+        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
+            athlete=athlete,
             event=event,
             medal="Gold"
         )
@@ -661,25 +720,27 @@ class AthleteEventTests(APITestCase):
         url = reverse('detail-athlete-event', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Team 1", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         athlete, _ = Athlete.objects.get_or_create(
             name="Athlete 1", 
             sex="M", 
             age=23, 
             height="160", 
             weight="78",
-            team=team
+            team=team,
+            sport=sport
             )
         game, _ = Game.objects.get_or_create(name="Game ABC")
-        city, _ = City.objects.get_or_create(name="City ABC")
-        sport, _ = Sport.objects.get_or_create(name="Sport ABC")
-        event, _ = Event.objects.get_or_create(name="Event ABC")
-        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
-            athlete=athlete,
+        city, _ = City.objects.get_or_create(name="City ABC")    
+        event, _ = Event.objects.get_or_create(
+            name="Event ABC",
             game=game,
             year=1991,
             season="Summer",
             city=city,
-            sport=sport,
+            )
+        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
+            athlete=athlete,
             event=event,
             medal="Gold"
         )
@@ -695,38 +756,36 @@ class AthleteEventTests(APITestCase):
         url = reverse('detail-athlete-event', kwargs={"pk": 1})
         noc, _ = Noc.objects.get_or_create(name="ABC")
         team, _ = Team.objects.get_or_create(name="Team 1", noc=noc)
+        sport, _ = Sport.objects.get_or_create(name="Sport A")
         athlete, _ = Athlete.objects.get_or_create(
             name="Athlete 1", 
             sex="M", 
             age=23, 
             height="160", 
             weight="78",
-            team=team
+            team=team, 
+            sport=sport
             )
         game, _ = Game.objects.get_or_create(name="Game ABC")
         city, _ = City.objects.get_or_create(name="City ABC")
         sport, _ = Sport.objects.get_or_create(name="Sport ABC")
-        event, _ = Event.objects.get_or_create(name="Event ABC")
-        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
-            athlete=athlete,
+        event, _ = Event.objects.get_or_create(
+            name="Event ABC",
             game=game,
             year=1991,
             season="Summer",
             city=city,
-            sport=sport,
+            )
+        athlete_event_1, _ = AthleteEvent.objects.get_or_create(
+            athlete=athlete,
             event=event,
             medal="Gold"
         )
         data = {
-            "athlete": athlete.id,
-            "game": game.id,
-            "year": 1992,
-            "season": "Winter",
-            "city": city.id,
-            "sport": sport.id,
-            "event": event.id,
-            "medal": "Bronze"
+            "athlete": athlete.name,
+            "event": event.name,
+            "medal": "Gold"
         }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(AthleteEvent.objects.get().year, 1992, msg="AthleteEvent object not updated correctly!")
+        self.assertEqual(AthleteEvent.objects.get().event.year, 1991, msg="AthleteEvent object not updated correctly!")

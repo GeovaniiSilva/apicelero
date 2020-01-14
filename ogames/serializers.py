@@ -11,7 +11,8 @@ class UploadCsvSerializer(serializers.ModelSerializer):
 
 
 class AthleteSerializer(serializers.ModelSerializer):
-
+    team = serializers.SlugRelatedField(queryset=Team.objects.all(), slug_field='name')
+    sport = serializers.SlugRelatedField(queryset=Sport.objects.all(), slug_field='name')
     class Meta:
         model = Athlete
         fields = '__all__'
@@ -29,11 +30,11 @@ class NocSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    #noc = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-
+    athletes = serializers.StringRelatedField(many=True, read_only=True)
+    noc = serializers.SlugRelatedField(queryset=Noc.objects.all(), slug_field='name')
     class Meta:
         model = Team
-        fields = ['name','noc']
+        fields = ['name','noc', 'athletes']
 
 
 
@@ -62,15 +63,18 @@ class SportSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-
+    game = serializers.SlugRelatedField(queryset=Game.objects.all(), slug_field='name')
+    city = serializers.SlugRelatedField(queryset=City.objects.all(), slug_field='name')
     class Meta:
         model = Event
         fields = '__all__'
+        depth = 1
 
 
 
 class AthleteEventSerializer(serializers.ModelSerializer):
-
+    athlete = serializers.SlugRelatedField(queryset=Athlete.objects.all(), slug_field='name')
+    event = serializers.SlugRelatedField(queryset=Event.objects.all(), slug_field='name')
     class Meta:
         model = AthleteEvent
         fields = '__all__'

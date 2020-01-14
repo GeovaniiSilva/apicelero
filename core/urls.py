@@ -18,6 +18,6 @@ from django.urls import path, include
 import ogames.urls as ogames_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('api/', include(ogames_urls)),
 ]

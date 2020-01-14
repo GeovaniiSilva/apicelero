@@ -40,7 +40,13 @@ class UploadCsvCreateAPIView(CreateAPIView):
                 sport_data={"name": row["sport"]}
                 sport_object, _ = Sport.objects.get_or_create(**sport_data)
 
-                event_data={"name": row["event"]}
+                event_data={
+                    "name": row["event"],
+                    "year": row["year"],
+                    "season": row["season"],
+                    "city": city_object,
+                    "game": game_object,
+                    }
                 event_object, _ = Event.objects.get_or_create(**event_data)
 
                 athlete_data={
@@ -49,17 +55,13 @@ class UploadCsvCreateAPIView(CreateAPIView):
                     "age": row["age"], 
                     "height": row["height"], 
                     "weight": row["weight"], 
-                    "team": team_object
+                    "team": team_object,
+                    "sport": sport_object,
                     }
                 athlete_object, _ = Athlete.objects.get_or_create(**athlete_data)
 
                 athlete_event_data={
                     "athlete": athlete_object, 
-                    "game": game_object, 
-                    "year": row["year"], 
-                    "season": row["season"], 
-                    "city": city_object, 
-                    "sport": sport_object, 
                     "event": event_object, 
                     "medal": row["medal"]
                     }
@@ -94,18 +96,30 @@ class NocRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class TeamListCreateAPIView(ListCreateAPIView):
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new Team object and list all Team objects.
+    """
     model = Team
     serializer_class = TeamSerializer
-    queryset = Team.objects.all()
+    queryset = Team.objects.all().order_by('id')
 
 
 class TeamRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a Team object.
+    """
     model = Team
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
 
 
 class AthleteListCreateAPIView(ListCreateAPIView):
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new Athlete object and list all Athlete objects.
+    """
     model = Athlete
     serializer_class = AthleteSerializer
     queryset = Athlete.objects.all()
@@ -133,7 +147,8 @@ class AthleteListCreateAPIView(ListCreateAPIView):
             queryset = Athlete.objects.filter(weight__gte=self.request.GET.get('aboveweight')).exclude(weight='NA')
         elif self.request.GET.get('belowweight'):
             queryset = Athlete.objects.filter(weight__lte=self.request.GET.get('belowweight')).exclude(weight='NA')
-        
+        elif self.request.GET.get('sport'):
+            queryset = Athlete.objects.filter(sport__name__icontains=self.request.GET.get('sport'))
         else:
             queryset = Athlete.objects.all().order_by('id')
         
@@ -142,14 +157,20 @@ class AthleteListCreateAPIView(ListCreateAPIView):
 
 
 class AthleteRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy an Athlete object.
+    """
     model = Athlete
     serializer_class = AthleteSerializer
     queryset = Athlete.objects.all()
 
 
 class GameListCreateAPIView(ListCreateAPIView):
-
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new Game object and list all Game objects.
+    """
     model = Game
     serializer_class = GameSerializer
     queryset = Game.objects.all().order_by('id')
@@ -157,14 +178,20 @@ class GameListCreateAPIView(ListCreateAPIView):
 
 
 class GameRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a Game object.
+    """
     model = Game
     serializer_class = GameSerializer
     queryset = Game.objects.all()
 
 
 class CityListCreateAPIView(ListCreateAPIView):
-
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new City object and list all City objects.
+    """
     model = City
     serializer_class = CitySerializer
     queryset = City.objects.all().order_by('id')
@@ -172,7 +199,10 @@ class CityListCreateAPIView(ListCreateAPIView):
 
 
 class CityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a City object.
+    """
     model = City
     serializer_class = CitySerializer
     queryset = City.objects.all()
@@ -180,35 +210,50 @@ class CityRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class EventListCreateAPIView(ListCreateAPIView):
-
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new Event object and list all Event objects.
+    """
     model = Event
     serializer_class = EventSerializer
     queryset = Event.objects.all().order_by('id')
 
 
 class EventRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a Event object.
+    """
     model = Event
     serializer_class = EventSerializer
     queryset = Event.objects.all()
 
 
 class SportListCreateAPIView(ListCreateAPIView):
-
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new Sport object and list all Sport objects.
+    """
     model = Sport
     serializer_class = SportSerializer
     queryset = Sport.objects.all().order_by('id')
 
 
 class SportRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy a Sport object.
+    """
     model = Sport
     serializer_class = SportSerializer
     queryset = Sport.objects.all()
 
 
 class AthleteEventListAPIView(ListCreateAPIView):
-
+    """
+    Class based view based on rest_framework.ListCreateAPIView,
+    used to create a new AthleteEvent object and list all AthleteEvent objects.
+    """
     model = AthleteEvent
     serializer_class = AthleteEventSerializer
     queryset = AthleteEvent.objects.all()
@@ -216,16 +261,6 @@ class AthleteEventListAPIView(ListCreateAPIView):
     def get_queryset(self):
         if self.request.GET.get('athlete'):
             queryset = AthleteEvent.objects.filter(athlete__name__icontains=self.request.GET.get('athlete'))
-        elif self.request.GET.get('game'):
-            queryset = AthleteEvent.objects.filter(game__name__icontains=self.request.GET.get('game'))
-        elif self.request.GET.get('year'):
-            queryset = AthleteEvent.objects.filter(year=self.request.GET.get('year'))
-        elif self.request.GET.get('season'):
-            queryset = AthleteEvent.objects.filter(season__icontains=self.request.GET.get('season'))
-        elif self.request.GET.get('city'):
-            queryset = AthleteEvent.objects.filter(city__name__icontains=self.request.GET.get('city'))
-        elif self.request.GET.get('sport'):
-            queryset = AthleteEvent.objects.filter(sport__name__icontains=self.request.GET.get('sport'))
         elif self.request.GET.get('event'):
             queryset = AthleteEvent.objects.filter(event__name__icontains=self.request.GET.get('event'))
         elif self.request.GET.get('medal'):
@@ -237,7 +272,10 @@ class AthleteEventListAPIView(ListCreateAPIView):
 
 
 class AthleteEventRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-
+    """
+    Class based view based on rest_framework.RetrieveUpdateDestroyAPIView,
+    used to show detail, update and destroy an AthleteEvent object.
+    """
     model = AthleteEvent
     serializer_class = AthleteEventSerializer
     queryset = AthleteEvent.objects.all()

@@ -42,7 +42,11 @@ class Sport(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=50, unique=True)
-
+    year = models.IntegerField()
+    season = models.CharField(max_length=50)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    
     def __str__(self):
         return self.name
 
@@ -53,7 +57,8 @@ class Athlete(models.Model):
     age = models.IntegerField()
     height = models.CharField(max_length=20)
     weight = models.CharField(max_length=20)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="athletes")
+    sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -61,11 +66,6 @@ class Athlete(models.Model):
 
 class AthleteEvent(models.Model):
     athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE) 
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    year = models.IntegerField()
-    season = models.CharField(max_length=50)
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
-    sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     medal = models.CharField(max_length=50, null=True)
 
