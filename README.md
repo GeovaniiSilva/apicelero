@@ -2,12 +2,14 @@
 ## Basic CRUD Api using Django, Django-rest-framework
 
 
-**The project is deployed in Heroku.com Link: [secret-bayou-30347](http://secret-bayou-30347.herokuapp.com/api/)**
+**The project is deployed in a Free instance of Heroku.com Link:** 
+[secret-bayou-30347](http://secret-bayou-30347.herokuapp.com/api/)
 
 ***What is used in this project?***
 - Python 3.7
 - Django 2.2
 - Djangorestframework 3.11
+- Postgres
 
 ### How the database is strucured: ###
 
@@ -25,7 +27,7 @@ The database is structured with the following models:
 ### Instructions on how to use this API ###
 #### Content-Type: application/json ####
 
-- /api/read-csv/ *Method: POST* **Read CSV File and store its data in database file**
+- /api/read-csv/ *Method: POST* **Read CSV File called _athlete_events.csv_ and store its data in database**
 
 - /api/nocs/ *Methods: GET/POST* **List all Noc objects/Create a new Noc object**
 - /api/nocs/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete a Noc object**
