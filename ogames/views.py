@@ -15,7 +15,16 @@ from ogames.serializers import *
 class ApiRootView(APIView):
     def get(self, request):
         data = {
-            'read-cvs-url': reverse_lazy('read-csv', request=request)
+            'read-csv-url': reverse_lazy('read-csv', request=request),
+            'list-create-nocs': reverse_lazy('list-nocs', request=request),
+            'list-create-cities': reverse_lazy('list-cities', request=request),
+            'list-create-games': reverse_lazy('list-games', request=request),
+            'list-create-events': reverse_lazy('list-events', request=request),
+            'list-create-sports': reverse_lazy('list-sports', request=request),
+            'list-create-teams': reverse_lazy('list-teams', request=request),
+            'list-create-athletes': reverse_lazy('list-athletes', request=request),
+            'list-create-athlete-events': reverse_lazy('list-athlete-events', request=request)
+
         }
         return Response(data)
 
@@ -27,7 +36,7 @@ class UploadCsvCreateAPIView(ListCreateAPIView):
     """
     model = UploadCsv
     serializer_class = UploadCsvSerializer
-    queryset = UploadCsv.objects.all()
+    queryset = UploadCsv.objects.all().order_by('id')
 
     @receiver(post_save, sender=UploadCsv)
     def fileupload_post_save(sender, instance, *args, **kwargs):
