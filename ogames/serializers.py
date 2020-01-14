@@ -39,26 +39,26 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
-
+    events = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
     class Meta:
         model = Game
-        fields = '__all__'
+        fields = ['name', 'events']
     
 
 
 class CitySerializer(serializers.ModelSerializer):
-
+    events = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
     class Meta:
         model = City
-        fields = '__all__'
+        fields = ['name', 'events']
 
 
 
 class SportSerializer(serializers.ModelSerializer):
-
+    athletes = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
     class Meta:
         model = Sport
-        fields = '__all__'
+        fields = ['name','athletes']
 
 
 
