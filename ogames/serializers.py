@@ -10,12 +10,25 @@ class UploadCsvSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class EventSerializer(serializers.ModelSerializer):
+    game = serializers.SlugRelatedField(queryset=Game.objects.all(), slug_field='name')
+    city = serializers.SlugRelatedField(queryset=City.objects.all(), slug_field='name')
+    class Meta:
+        model = Event
+        fields = ['name','year','season','city','game']
+        
+
+
+
 class AthleteSerializer(serializers.ModelSerializer):
     team = serializers.SlugRelatedField(queryset=Team.objects.all(), slug_field='name')
     sport = serializers.SlugRelatedField(queryset=Sport.objects.all(), slug_field='name')
+
     class Meta:
         model = Athlete
-        fields = '__all__'
+        fields = ['name','sex','age','height','weight','team','sport']
     
 
 
@@ -62,14 +75,6 @@ class SportSerializer(serializers.ModelSerializer):
 
 
 
-class EventSerializer(serializers.ModelSerializer):
-    game = serializers.SlugRelatedField(queryset=Game.objects.all(), slug_field='name')
-    city = serializers.SlugRelatedField(queryset=City.objects.all(), slug_field='name')
-    class Meta:
-        model = Event
-        fields = '__all__'
-        depth = 1
-
 
 
 class AthleteEventSerializer(serializers.ModelSerializer):
@@ -77,4 +82,4 @@ class AthleteEventSerializer(serializers.ModelSerializer):
     event = serializers.SlugRelatedField(queryset=Event.objects.all(), slug_field='name')
     class Meta:
         model = AthleteEvent
-        fields = '__all__'
+        fields = ['athlete', 'event', 'medal']

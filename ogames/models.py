@@ -65,7 +65,7 @@ class Athlete(models.Model):
 
 
 class AthleteEvent(models.Model):
-    athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE) 
+    athlete = models.ForeignKey(Athlete, on_delete=models.CASCADE, related_name='athlete_event') 
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     medal = models.CharField(max_length=50, null=True)
 
