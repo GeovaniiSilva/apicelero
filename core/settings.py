@@ -20,6 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
+DEBUG = os.environ['DEBUG']
+SECRET_KEY = ['SECRET_KEY']
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,10 +29,10 @@ if os.path.isfile(dotenv_file):
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!kj%r4xol*qut-a*0#ei@sk+2#q@uyrui(d@%r@j+97hgo69y&'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'secret-bayou-30347.herokuapp.com']
 
