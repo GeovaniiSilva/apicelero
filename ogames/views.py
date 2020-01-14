@@ -1,5 +1,8 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, ListCreateAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.reverse import reverse_lazy
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 import csv
@@ -9,12 +12,22 @@ from ogames.serializers import *
 
 
 
-class UploadCsvCreateAPIView(CreateAPIView):
+class ApiRootView(APIView):
+    def get(self, request):
+        data = {
+            'read-cvs-url': reverse_lazy('read-csv', request=request)
+        }
+        return Response(data)
+
+
+
+class UploadCsvCreateAPIView(ListCreateAPIView):
     """
     Class based view to upload a CSV file and store all data in the database. 
     """
     model = UploadCsv
     serializer_class = UploadCsvSerializer
+    queryset = UploadCsv.objects.all()
 
     @receiver(post_save, sender=UploadCsv)
     def fileupload_post_save(sender, instance, *args, **kwargs):

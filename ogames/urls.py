@@ -4,6 +4,7 @@ from .views import *
 
 
 urlpatterns = [
+    path('', ApiRootView.as_view(), name='api-root'),
     path('read-csv/', UploadCsvCreateAPIView.as_view(), name='read-csv'),
     path('athlete-events/', AthleteEventListAPIView.as_view(), name='list-athlete-events'),
     path('athlete-events/<int:pk>/', AthleteEventRetrieveUpdateDestroyAPIView.as_view(), name='detail-athlete-event'),
