@@ -34,19 +34,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='athlete',
             name='sport',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='ogames.Sport'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ogames.Sport'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='event',
             name='city',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='ogames.City'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ogames.City'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='event',
             name='game',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='ogames.Game'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ogames.Game'),
             preserve_default=False,
         ),
         migrations.AddField(
