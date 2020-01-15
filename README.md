@@ -10,6 +10,7 @@ requirements.txt
 1. SECRET_KEY
 2. DEBUG
 3. DATABASES
+
 ***What is used in this project?***
 - Python 3.7
 - Django 2.2
