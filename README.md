@@ -4,7 +4,12 @@
 
 **The project is deployed in a Free instance of Heroku.com Link:** 
 [secret-bayou-30347](http://secret-bayou-30347.herokuapp.com/api/)
-
+- To run this project on your machine, be sure to install all dependencies in
+requirements.txt
+- Create a .env file and set the variables Bellow:
+1. SECRET_KEY
+2. DEBUG
+3. DATABASES
 ***What is used in this project?***
 - Python 3.7
 - Django 2.2
@@ -12,7 +17,6 @@
 - Postgres
 
 ### How the database is strucured: ###
-
 The database is structured with the following models:
 1. UploadCSV *Model used to Start reading CSV file and store its path in BD and itself in media folder*
 2. Noc *Model used to store data from ~~National Olimpic Commitee~~*
