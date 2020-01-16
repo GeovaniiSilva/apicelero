@@ -79,7 +79,54 @@ class SportSerializer(serializers.ModelSerializer):
 
 class AthleteEventSerializer(serializers.ModelSerializer):
     athlete = serializers.SlugRelatedField(queryset=Athlete.objects.all(), slug_field='name')
+    sex = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
+    noc = serializers.SerializerMethodField()
     event = serializers.SlugRelatedField(queryset=Event.objects.all(), slug_field='name')
+    game = serializers.SerializerMethodField()
+    year = serializers.SerializerMethodField()
+    sport = serializers.SerializerMethodField()
+    city = serializers.SerializerMethodField()
+    season = serializers.SerializerMethodField()
+    height = serializers.SerializerMethodField()
+    weight = serializers.SerializerMethodField()
+
+
+
     class Meta:
         model = AthleteEvent
-        fields = ['athlete', 'event', 'medal']
+        fields = ['athlete', 'sex', 'age', 'height', 'weight', 'team', 'noc', 'game', 'year', 'season', 'city', 'sport', 'event', 'medal']
+
+    def get_noc(self, obj):
+        return obj.athlete.team.noc.name
+
+    def get_team(self, obj):
+        return obj.athlete.team.name
+
+    def get_age(self, obj):
+        return obj.athlete.age
+
+    def get_height(self, obj):
+        return obj.athlete.height
+    
+    def get_weight(self, obj):
+        return obj.athlete.weight
+
+    def get_sex(self, obj):
+        return obj.athlete.sex
+
+    def get_game(self, obj):
+        return obj.event.game.name
+
+    def get_year(self, obj):
+        return obj.event.year
+
+    def get_sport(self, obj):
+        return obj.athlete.sport.name
+
+    def get_city(self, obj):
+        return obj.event.city.name
+        
+    def get_season(self, obj):
+        return obj.event.season
