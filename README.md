@@ -34,8 +34,7 @@ The database is structured with the following models:
 
 **A full detail and description of how to use this api can be found here [Link](https://web.postman.co/collections/1758773-a7e7c7f6-1593-45cc-a664-d0751bc56636?version=latest&workspace=5ce8abda-99f0-44fb-8231-cd3182b9a4a0)**
 
-- /api/ *Method: GET* **List all urls/endpoints to create an object or list all objects**
-1. Ex: 
+- /api/ *Method: GET* **List all urls/endpoints to create an object or list all objects** 
 
 - /api/read-csv/ *Method: POST* **Read CSV File called _athlete_events.csv_ and store its data in database**
 
