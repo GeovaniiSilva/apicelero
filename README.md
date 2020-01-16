@@ -1,12 +1,12 @@
 # Rest API for reading a CSV file containing some data from Olympic Events
-## Basic CRUD Api using Django, Django-rest-framework
+## Basic CRUD Api using Django, Django rest framework
 
 
 **The project is deployed in a Free instance of Heroku.com Link:** 
 [secret-bayou-30347](http://secret-bayou-30347.herokuapp.com/api/)
 - To run this project on your machine, be sure to install all dependencies in
 requirements.txt
-- Create a .env file and set the variables Bellow:
+- Create a .env file and set the variables bellow:
 1. SECRET_KEY
 2. DEBUG
 3. DATABASES
@@ -58,9 +58,9 @@ The database is structured with the following models:
 - /api/events/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete an Event object**
 
 - /api/athletes/ *Methods: GET/POST* **List all athletes objects/Create a new Athlete objects**
-- /api/athletes/?*querystring=*/ *Methods: GET* **Filter by querystring: [ 'sex','team','age','aboveage','belowage','height','aboveheight','belowheight','weight','aboveweight','belowweight', 'sport' ] all Athlete objects**
+- /api/athletes/?*querystring=(value)*/ *Methods: GET* **Filter by querystring: [ 'sex','team','age','aboveage','belowage','height','aboveheight','belowheight','weight','aboveweight','belowweight', 'sport' ] all Athlete objects**
 - /api/athletes/*id*/ *Methods: GET/PUT/PATCH/DELETE/* **Retrieve/Update/Delete an Athlete object**
 
 - /api/athlete-events/ *Methods: GET/POST* **List all AthleteEvent object/Create a new AthleteEvent object**
-- /api/athletes-events/?*querystring=* *Methods: GET/PUT/PATCH/DELETE/* **Filter by querystring: [ 'athlete','event','medal' ] all AthleteEvent objects**
+- /api/athletes-events/?*querystring=(value)* *Methods: GET/* **Filter by querystring: [ 'athlete','event','medal' ] all AthleteEvent objects**
 - /api/athlete-events/*id*/ *Methods: GET/PUT/PATCH/DELETE* **Retrieve/Update/Delete an AthleteEvent object**
