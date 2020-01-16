@@ -47,47 +47,52 @@ class UploadCsvCreateAPIView(ListCreateAPIView):
         with open(instance.file.path, 'r') as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
-                noc_data={"name": row["noc"]}
-                noc_object, _ = Noc.objects.get_or_create(**noc_data)
+                noc_data={"name": row["NOC"]}
+                noc_object, noc_created = Noc.objects.get_or_create(**noc_data)
 
-                team_data={"name": row["team"], "noc": noc_object}
-                team_object, _ = Team.objects.get_or_create(**team_data)
+                team_data={"name": row["Team"], "noc": noc_object}
+                team_object, team_created = Team.objects.get_or_create(**team_data)
 
-                game_data={"name": row["games"]}
-                game_object, _ = Game.objects.get_or_create(**game_data)
 
-                city_data={"name": row["city"]}
-                city_object, _ = City.objects.get_or_create(**city_data)
+                game_data={"name": row["Games"]}
+                game_object, game_created = Game.objects.get_or_create(**game_data)
 
-                sport_data={"name": row["sport"]}
-                sport_object, _ = Sport.objects.get_or_create(**sport_data)
+
+                city_data={"name": row["City"]}
+                city_object, city_created = City.objects.get_or_create(**city_data)
+
+
+                sport_data={"name": row["Sport"]}
+                sport_object, sport_created = Sport.objects.get_or_create(**sport_data)
+
 
                 event_data={
-                    "name": row["event"],
-                    "year": row["year"],
-                    "season": row["season"],
+                    "name": row["Event"],
+                    "year": row["Year"],
+                    "season": row["Season"],
                     "city": city_object,
                     "game": game_object,
                     }
-                event_object, _ = Event.objects.get_or_create(**event_data)
+                event_object, event_created = Event.objects.get_or_create(**event_data, defaults={'name': row["Event"]})
+
 
                 athlete_data={
-                    "name": row["name"], 
-                    "sex": row["sex"], 
-                    "age": row["age"], 
-                    "height": row["height"], 
-                    "weight": row["weight"], 
+                    "name": row["Name"], 
+                    "sex": row["Sex"], 
+                    "age": row["Age"], 
+                    "height": row["Height"], 
+                    "weight": row["Weight"], 
                     "team": team_object,
                     "sport": sport_object,
                     }
-                athlete_object, _ = Athlete.objects.get_or_create(**athlete_data)
+                athlete_object, athlete_created = Athlete.objects.get_or_create(**athlete_data)
 
                 athlete_event_data={
                     "athlete": athlete_object, 
                     "event": event_object, 
-                    "medal": row["medal"]
+                    "medal": row["Medal"]
                     }
-                athlete_event_object, _ = AthleteEvent.objects.get_or_create(**athlete_event_data)
+                athlete_event_object, athlete_event_created = AthleteEvent.objects.get_or_create(**athlete_event_data)
 
 
 
@@ -147,7 +152,9 @@ class AthleteListCreateAPIView(ListCreateAPIView):
     queryset = Athlete.objects.all()
 
     def get_queryset(self):
-        if self.request.GET.get('sex'):
+        if self.request.GET.get('name'):
+            queryset = Athlete.objects.filter(name__icontains=self.request.GET.get('name'))
+        elif self.request.GET.get('sex'):
             queryset = Athlete.objects.filter(sex__icontains=self.request.GET.get('sex'))
         elif self.request.GET.get('team'):
             queryset = Athlete.objects.filter(team__name__icontains=self.request.GET.get('team'))

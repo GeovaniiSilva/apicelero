@@ -6,42 +6,42 @@ class UploadCsv(models.Model):
 
 
 class Noc(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     noc = models.ForeignKey(Noc, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
 
 class Game(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
 
 
 class City(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
 
 
 class Sport(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     year = models.IntegerField()
     season = models.CharField(max_length=50)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='events')
@@ -54,7 +54,7 @@ class Event(models.Model):
 class Athlete(models.Model):
     name = models.CharField(max_length=50)
     sex = models.CharField(max_length=20)
-    age = models.IntegerField()
+    age = models.CharField(max_length=20)
     height = models.CharField(max_length=20)
     weight = models.CharField(max_length=20)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="athletes")
@@ -62,6 +62,7 @@ class Athlete(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class AthleteEvent(models.Model):
