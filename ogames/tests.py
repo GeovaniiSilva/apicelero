@@ -2,6 +2,8 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from ogames.models import *
+from core.settings import BASE_DIR
+import os
 
 
 """
@@ -14,7 +16,20 @@ List of tests:
 6 - Sport
 7 - Event
 8 - AthleteEvent
+9 - UploadCsv
 """
+
+class UploadCsvTests(APITestCase):
+
+    def test_create_uploadcsv(self):
+        url = reverse('read-csv')
+        data = {
+            'file': open('test.csv', 'r')
+        }
+        response = self.client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(UploadCsv.objects.count(), 1)
+        data['file'].close()
 
 
 class NocTests(APITestCase):

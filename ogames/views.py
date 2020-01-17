@@ -6,7 +6,7 @@ from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 import csv
 
 from ogames.models import *
@@ -40,13 +40,13 @@ class UploadCsvCreateAPIView(ListCreateAPIView):
     serializer_class = UploadCsvSerializer
     queryset = UploadCsv.objects.all().order_by('id')
 
-    @receiver(post_save, sender=UploadCsv)
+    @receiver(pre_save, sender=UploadCsv)
     def fileupload_post_save(sender, instance, *args, **kwargs):
         """
         post save signal to read the csv file and separate the data according to the models, 
         storing them in the database
         """
-        with open(instance.file.path, 'r') as f:
+        with open(instance.file.url, 'r') as f:
             reader = csv.DictReader(f, delimiter=',')
             for row in reader:
                 noc_data={"name": row["NOC"]}
