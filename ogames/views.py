@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, ListCreateAPIView
 from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 from django.dispatch import receiver
@@ -149,40 +151,10 @@ class AthleteListCreateAPIView(ListCreateAPIView):
     """
     model = Athlete
     serializer_class = AthleteSerializer
-    queryset = Athlete.objects.all()
-
-    def get_queryset(self):
-        if self.request.GET.get('name'):
-            queryset = Athlete.objects.filter(name__icontains=self.request.GET.get('name'))
-        elif self.request.GET.get('sex'):
-            queryset = Athlete.objects.filter(sex__icontains=self.request.GET.get('sex'))
-        elif self.request.GET.get('team'):
-            queryset = Athlete.objects.filter(team__name__icontains=self.request.GET.get('team'))
-        elif self.request.GET.get('age'):
-            queryset = Athlete.objects.filter(age__iexact=self.request.GET.get('age'))
-        elif self.request.GET.get('aboveage'):
-            queryset = Athlete.objects.filter(age__gte=self.request.GET.get('aboveage'))
-        elif self.request.GET.get('belowage'):
-            queryset = Athlete.objects.filter(age__lte=self.request.GET.get('belowage'))
-        elif self.request.GET.get('height'):
-            queryset = Athlete.objects.filter(height__iexact=self.request.GET.get('height'))
-        elif self.request.GET.get('aboveheight'):
-            queryset = Athlete.objects.filter(height__gte=self.request.GET.get('aboveheight'))
-        elif self.request.GET.get('belowheight'):
-            queryset = Athlete.objects.filter(height__lte=self.request.GET.get('belowheight'))
-        elif self.request.GET.get('weight'):
-            queryset = Athlete.objects.filter(weight__iexact=self.request.GET.get('weight'))
-        elif self.request.GET.get('aboveweight'):
-            queryset = Athlete.objects.filter(weight__gte=self.request.GET.get('aboveweight')).exclude(weight='NA')
-        elif self.request.GET.get('belowweight'):
-            queryset = Athlete.objects.filter(weight__lte=self.request.GET.get('belowweight')).exclude(weight='NA')
-        elif self.request.GET.get('sport'):
-            queryset = Athlete.objects.filter(sport__name__icontains=self.request.GET.get('sport'))
-        else:
-            queryset = Athlete.objects.all().order_by('id')
-        
-        return queryset
-
+    queryset = Athlete.objects.all().order_by('id')
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['age', 'sex', 'sport', 'team','height','weight']
+    search_fields = ['name']
 
 
 class AthleteRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
