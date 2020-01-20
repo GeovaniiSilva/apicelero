@@ -2,8 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from ogames.models import *
-from core.settings import BASE_DIR
-import os
+
 
 
 """
@@ -20,17 +19,35 @@ List of tests:
 """
 
 class UploadCsvTests(APITestCase):
-
+    '''
+    A test case for UploadCsv file model
+    '''
     def test_create_uploadcsv(self):
+        '''
+        To be sure a csv file is read correctly!
+        '''
         url = reverse('read-csv')
+        file = open('test.csv', 'r')
         data = {
-            'file': open('test.csv', 'r')
+            'file': file
         }
+        
+        
         response = self.client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(UploadCsv.objects.count(), 1)
+        self.assertEqual(AthleteEvent.objects.count(), 55)
         data['file'].close()
 
+    def test_list_csv(self):
+        '''
+        To be sure a list of UploadCsv object return correctly
+        '''
+        url = reverse('read-csv')
+        upload_csv = UploadCsv.objects.get_or_create(file='test.csv')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(UploadCsv.objects.count(), 1)
 
 class NocTests(APITestCase):
     """
