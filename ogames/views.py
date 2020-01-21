@@ -70,9 +70,6 @@ class UploadCsvCreateAPIView(ListCreateAPIView):
 
                 event_data={
                     "name": row["Event"],
-                    "year": row["Year"],
-                    "season": row["Season"],
-                    "city": city_object,
                     "game": game_object,
                     }
                 event_object, event_created = Event.objects.get_or_create(**event_data, defaults={'name': row["Event"]})
@@ -91,7 +88,10 @@ class UploadCsvCreateAPIView(ListCreateAPIView):
 
                 athlete_event_data={
                     "athlete": athlete_object, 
-                    "event": event_object, 
+                    "event": event_object,
+                    "year": row["Year"],
+                    "season": row["Season"],
+                    "city": city_object, 
                     "medal": row["Medal"]
                     }
                 athlete_event_object, athlete_event_created = AthleteEvent.objects.get_or_create(**athlete_event_data)

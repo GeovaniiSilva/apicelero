@@ -525,9 +525,6 @@ class EventTests(APITestCase):
         game, _ = Game.objects.get_or_create(name="Game B")
         data = {
             "name": "Event ABC",
-            'year': 1900,
-            "season": "Summer",
-            "city": city.name,
             "game": game.name
         }
         response = self.client.post(url, data, format='json')
@@ -543,23 +540,14 @@ class EventTests(APITestCase):
         game, _ = Game.objects.get_or_create(name="Game B")
         event_1 = Event.objects.get_or_create(
             name="Event A",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game
             )
         event_2 = Event.objects.get_or_create(
             name="Event B",
-            year=1992,
-            season="Winter",
-            city=city,
             game=game
             )
         event_3 = Event.objects.get_or_create(
             name="Event C",
-            year=1993,
-            season="Autumn",
-            city=city,
             game=game
             )
         response = self.client.get(url, format='json')
@@ -571,13 +559,9 @@ class EventTests(APITestCase):
         To be sure a detailed Event object is exhibited correctly
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        city, _ = City.objects.get_or_create(name="City A")
         game, _ = Game.objects.get_or_create(name="Game B")
         event_1 = Event.objects.get_or_create(
             name="Event ABC",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game
             )
         response = self.client.get(url, format='json')
@@ -589,13 +573,9 @@ class EventTests(APITestCase):
         To be sure a Event object is deleted correctly!
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        city, _ = City.objects.get_or_create(name="City A")
         game, _ = Game.objects.get_or_create(name="Game B")
         event_1 = Event.objects.get_or_create(
             name="Event A",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game
             )
         response = self.client.delete(url)
@@ -607,13 +587,9 @@ class EventTests(APITestCase):
         To be sure a Event object is deleted correctly!
         """
         url = reverse('detail-event', kwargs={"pk": 1})
-        city, _ = City.objects.get_or_create(name="City A")
         game, _ = Game.objects.get_or_create(name="Game B")
         event_1 = Event.objects.get_or_create(
             name="Event A",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game
             )
         data = {
@@ -650,14 +626,14 @@ class AthleteEventTests(APITestCase):
         game, _ = Game.objects.get_or_create(name="Game B")
         event, _ = Event.objects.get_or_create(
             name="Event A",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game
             )
         data = {
             "athlete": athlete.name,
             "event": event.name,
+            'year': 1900,
+            "season": "Summer",
+            "city": city.id,
             "medal": "Gold"
         }
         response = self.client.post(url, data, format='json')
@@ -685,24 +661,30 @@ class AthleteEventTests(APITestCase):
         city, _ = City.objects.get_or_create(name="City ABC")
         event, _ = Event.objects.get_or_create(
             name="Event ABC",
-            year=1991,
-            season="Summer",
-            city=city,
             game=game,
             )
         athlete_event_1, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Gold"
         )
         athlete_event_2, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Bronze"
         )
         athlete_event_3, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Silver"
         )
         response = self.client.get(url, format='json')
@@ -730,14 +712,14 @@ class AthleteEventTests(APITestCase):
         city, _ = City.objects.get_or_create(name="City ABC")
         event, _ = Event.objects.get_or_create(
             name="Event ABC",
-            game=game,
-            year=1991,
-            season="Summer",
-            city=city,
+            game=game
             )
         athlete_event_1, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Gold"
         )
 
@@ -766,14 +748,14 @@ class AthleteEventTests(APITestCase):
         city, _ = City.objects.get_or_create(name="City ABC")    
         event, _ = Event.objects.get_or_create(
             name="Event ABC",
-            game=game,
-            year=1991,
-            season="Summer",
-            city=city,
+            game=game
             )
         athlete_event_1, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Gold"
         )
 
@@ -803,21 +785,24 @@ class AthleteEventTests(APITestCase):
         sport, _ = Sport.objects.get_or_create(name="Sport ABC")
         event, _ = Event.objects.get_or_create(
             name="Event ABC",
-            game=game,
-            year=1991,
-            season="Summer",
-            city=city,
+            game=game
             )
         athlete_event_1, _ = AthleteEvent.objects.get_or_create(
             athlete=athlete,
             event=event,
+            year=1991,
+            season="Summer",
+            city=city,
             medal="Gold"
         )
         data = {
             "athlete": athlete.name,
             "event": event.name,
+            "year": 1992,
+            "season":"Summer",
+            "city":city.id,
             "medal": "Gold"
         }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(AthleteEvent.objects.get().event.year, 1991, msg="AthleteEvent object not updated correctly!")
+        self.assertEqual(AthleteEvent.objects.get().year, 1992, msg="AthleteEvent object not updated correctly!")

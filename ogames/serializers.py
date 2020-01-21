@@ -12,11 +12,11 @@ class UploadCsvSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     game = serializers.SlugRelatedField(queryset=Game.objects.all(), slug_field='name')
-    city = serializers.SlugRelatedField(queryset=City.objects.all(), slug_field='name')
+    
 
     class Meta:
         model = Event
-        fields = ['name','year','season','city','game']
+        fields = ['name','game']
         
 
 
@@ -57,10 +57,10 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class CitySerializer(serializers.ModelSerializer):
-    events = serializers.SlugRelatedField(slug_field='name', many=True, read_only=True)
+
     class Meta:
         model = City
-        fields = ['name', 'events']
+        fields = ['name']
 
 
 
@@ -80,10 +80,7 @@ class AthleteEventSerializer(serializers.ModelSerializer):
     noc = serializers.SerializerMethodField()
     event = serializers.SlugRelatedField(queryset=Event.objects.all(), slug_field='name')
     game = serializers.SerializerMethodField()
-    year = serializers.SerializerMethodField()
     sport = serializers.SerializerMethodField()
-    city = serializers.SerializerMethodField()
-    season = serializers.SerializerMethodField()
     height = serializers.SerializerMethodField()
     weight = serializers.SerializerMethodField()
 
